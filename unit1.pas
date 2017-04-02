@@ -38,7 +38,11 @@ type
   TForm1 = class(TForm)
     Button1: TButton;
     Image1: TImage;
+    Label1: TLabel;
+    Label2: TLabel;
     procedure Button1Click(Sender: TObject);
+    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { private declarations }
   public
@@ -160,6 +164,14 @@ begin
   gf.InitBoard();
   gf.Draw();
 
+end;
+
+
+procedure TForm1.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  label1.Caption := IntToStr(X);
+  label2.Caption := IntToStr(Y);
 end;
 
 end.
