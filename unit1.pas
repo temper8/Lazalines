@@ -58,7 +58,7 @@ type
        end;
 var
   Form1: TForm1;
-
+  gameboard:TGameBoard;
 implementation
 
 {$R *.lfm}
@@ -157,12 +157,10 @@ end;
 { TForm1 }
 
 procedure TForm1.Button1Click(Sender: TObject);
-var
-gb:TGameBoard;
 begin
-  gb := TGameBoard.Create(image1.Canvas);
-  gb.InitBoard();
-  gb.Draw();
+  gameboard := TGameBoard.Create(image1.Canvas);
+  gameboard.InitBoard();
+  gameboard.Draw();
 
 end;
 
