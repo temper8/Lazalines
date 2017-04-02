@@ -13,7 +13,7 @@ const
 
 type
 
-  TGameField = class
+  TGameBoard = class
     private
     { private declarations }
     myCanvas : TCanvas;
@@ -63,7 +63,7 @@ implementation
 
 {$R *.lfm}
 
-constructor TGameField.Create(canvas : TCanvas);
+constructor TGameBoard.Create(canvas : TCanvas);
 
 begin
   myCanvas := canvas;
@@ -71,7 +71,7 @@ begin
   y_size := 7;
 end;
 
-procedure TGameField.InitBoard();
+procedure TGameBoard.InitBoard();
 var
   i,j:integer;
   rnd: integer;
@@ -86,14 +86,14 @@ begin
     end;
 end;
 
-procedure TGameField.Clear();
+procedure TGameBoard.Clear();
 begin
   myCanvas.Brush.Color:=clwhite;
   myCanvas.Brush.Style:=bssolid;
   myCanvas.Rectangle(0,0,myCanvas.Width, myCanvas.Height);
 end;
 
-procedure TGameField.DrawBoard();
+procedure TGameBoard.DrawBoard();
 var
   BoardWidth, BoardHeight : integer;
 
@@ -123,7 +123,7 @@ begin
       end;
 end;
 
-procedure TGameField.DrawBall(x,y:integer; color: integer);
+procedure TGameBoard.DrawBall(x,y:integer; color: integer);
 var
   xx,yy:integer;
   r:integer;
@@ -138,7 +138,7 @@ begin
 
 end;
 
-procedure TGameField.Draw();
+procedure TGameBoard.Draw();
 var
   i,j : integer;
 begin
@@ -158,11 +158,11 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 var
-gf:TGameField;
+gb:TGameBoard;
 begin
-  gf := TGameField.Create(image1.Canvas);
-  gf.InitBoard();
-  gf.Draw();
+  gb := TGameBoard.Create(image1.Canvas);
+  gb.InitBoard();
+  gb.Draw();
 
 end;
 
