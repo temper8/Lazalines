@@ -132,26 +132,12 @@ var
 begin
   if (color = 0) then exit;
 
-
-  if (color >0 ) then
-       begin
-         xx := x*cell_size - cell_size div 2 + left_margin;
-         yy := y*cell_size - cell_size div 2 + top_margin;
-         r:=15;
-         myCanvas.Pen.Color:= ballsColor[color];
-         myCanvas.Brush.Color:=ballsColor[color];
-         myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
-       end
-  else
-    begin
-       xx := (x-1)*cell_size + left_margin;
-       yy := (y-1)*cell_size + top_margin;
-       myCanvas.Pen.Color:= clBlue;
-       myCanvas.Brush.Color:=clRed;
-       myCanvas.Rectangle(xx,yy,xx+cell_size,yy+cell_size);
-    end;
-
-
+  xx := x*cell_size - cell_size div 2 + left_margin;
+  yy := y*cell_size - cell_size div 2 + top_margin;
+  r:=15;
+  myCanvas.Pen.Color:= ballsColor[color];
+  myCanvas.Brush.Color:=ballsColor[color];
+  myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
 end;
 
 procedure TGameBoard.DrawSquare(x,y:integer; selected: boolean);
@@ -159,6 +145,7 @@ var
   xx,yy:integer;
   r:integer;
   begin
+    if (x<1) then exit;
     xx := (x-1)*cell_size + left_margin;
     yy := (y-1)*cell_size + top_margin;
     myCanvas.Pen.Color:= clGreen;
@@ -167,12 +154,7 @@ var
 
     myCanvas.Rectangle(xx,yy,xx+cell_size,yy+cell_size);
 
-    xx := x*cell_size - cell_size div 2 + left_margin;
-    yy := y*cell_size - cell_size div 2 + top_margin;
-    r:=15;
-    myCanvas.Pen.Color:= ballsColor[board[x,y]];
-    myCanvas.Brush.Color:=ballsColor[board[x,y]];
-    myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
+    DrawBall(x,y,board[x,y]);
   end;
 
 procedure TGameBoard.Draw();
