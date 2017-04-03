@@ -21,7 +21,8 @@ type
     cell_size : integer;
     left_margin,top_margin : integer;
     board : array[0..10,0..10] of integer;
-    selectedSquare : TPoint;
+    startSquare : TPoint;
+    endSquare : TPoint;
     procedure InitBoard();
     procedure Clear();
     procedure DrawBoard();
@@ -79,6 +80,8 @@ var
   i,j:integer;
   rnd: integer;
 begin
+  startSquare := Point(0,0);
+  endSquare := Point(0,0);
   for i:=0 to x_size do
    for j:=0 to y_size do
     begin
@@ -174,13 +177,23 @@ procedure TGameBoard.OnClick(x,y:integer);
 var
   xx,yy :integer;
 begin
-
- DrawSquare(selectedSquare.x,selectedSquare.y, false);
  xx :=(x-left_margin) div cell_size+1;
  yy :=(y-top_margin) div cell_size+1;
- DrawSquare(xx,yy, true);
- selectedSquare.x := xx;
- selectedSquare.y := yy;
+ if (startSquare.x = 0) then
+      begin
+        startSquare := Point(xx,yy);
+        DrawSquare(xx,yy, true);
+      end
+ else
+      begin
+        DrawSquare(startSquare.x,startSquare.y, false);
+        endSquare := Point(xx,yy);
+        DrawSquare(xx,yy, true);
+      end;
+
+
+
+
  //Draw();
 end;
 
