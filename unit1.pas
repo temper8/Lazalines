@@ -21,10 +21,12 @@ type
     cell_size : integer;
     left_margin,top_margin : integer;
     board : array[0..10,0..10] of integer;
+    selectedSquare : TPoint;
     procedure InitBoard();
     procedure Clear();
     procedure DrawBoard();
     procedure DrawBall(x,y:integer; color: integer);
+    procedure DrawSquare(x,y:integer; selected: boolean);
   public
     { public declarations }
 
@@ -152,6 +154,27 @@ begin
 
 end;
 
+procedure TGameBoard.DrawSquare(x,y:integer; selected: boolean);
+var
+  xx,yy:integer;
+  r:integer;
+  begin
+    xx := (x-1)*cell_size + left_margin;
+    yy := (y-1)*cell_size + top_margin;
+    myCanvas.Pen.Color:= clGreen;
+    if selected then  myCanvas.Brush.Color:=clRed
+           else myCanvas.Brush.Color:=clLtGray;
+
+    myCanvas.Rectangle(xx,yy,xx+cell_size,yy+cell_size);
+
+    xx := x*cell_size - cell_size div 2 + left_margin;
+    yy := y*cell_size - cell_size div 2 + top_margin;
+    r:=15;
+    myCanvas.Pen.Color:= ballsColor[board[x,y]];
+    myCanvas.Brush.Color:=ballsColor[board[x,y]];
+    myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
+  end;
+
 procedure TGameBoard.Draw();
 var
   i,j : integer;
@@ -163,17 +186,20 @@ begin
       begin
         DrawBall(i,j, board[i,j]);
       end;
-
 end;
 
 procedure TGameBoard.OnClick(x,y:integer);
 var
   xx,yy :integer;
 begin
+
+ DrawSquare(selectedSquare.x,selectedSquare.y, false);
  xx :=(x-left_margin) div cell_size+1;
  yy :=(y-top_margin) div cell_size+1;
- board[xx,yy] := -1;
- Draw();
+ DrawSquare(xx,yy, true);
+ selectedSquare.x := xx;
+ selectedSquare.y := yy;
+ //Draw();
 end;
 
 
