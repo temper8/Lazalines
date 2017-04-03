@@ -30,6 +30,7 @@ type
 
     constructor Create(canvas : TCanvas);
     procedure Draw();
+    procedure OnClick(x,y:integer);
   end;
 
 
@@ -96,7 +97,6 @@ end;
 procedure TGameBoard.DrawBoard();
 var
   BoardWidth, BoardHeight : integer;
-
   dx : integer;
   i :integer;
 begin
@@ -129,12 +129,26 @@ var
   r:integer;
 begin
   if (color = 0) then exit;
-  xx := x*cell_size - cell_size div 2 + left_margin;
-  yy := y*cell_size - cell_size div 2 + top_margin;
-  r:=15;
-  myCanvas.Pen.Color:= ballsColor[color];
-  myCanvas.Brush.Color:=ballsColor[color];
-  myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
+
+
+  if (color >0 ) then
+       begin
+         xx := x*cell_size - cell_size div 2 + left_margin;
+         yy := y*cell_size - cell_size div 2 + top_margin;
+         r:=15;
+         myCanvas.Pen.Color:= ballsColor[color];
+         myCanvas.Brush.Color:=ballsColor[color];
+         myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
+       end
+  else
+    begin
+       xx := (x-1)*cell_size + left_margin;
+       yy := (y-1)*cell_size + top_margin;
+       myCanvas.Pen.Color:= clBlue;
+       myCanvas.Brush.Color:=clRed;
+       myCanvas.Rectangle(xx,yy,xx+cell_size,yy+cell_size);
+    end;
+
 
 end;
 
@@ -152,6 +166,15 @@ begin
 
 end;
 
+procedure TGameBoard.OnClick(x,y:integer);
+var
+  xx,yy :integer;
+begin
+ xx :=(x-left_margin) div cell_size+1;
+ yy :=(y-top_margin) div cell_size+1;
+ board[xx,yy] := -1;
+ Draw();
+end;
 
 
 { TForm1 }
@@ -170,6 +193,7 @@ procedure TForm1.Image1MouseUp(Sender: TObject; Button: TMouseButton;
 begin
   label1.Caption := IntToStr(X);
   label2.Caption := IntToStr(Y);
+  gameboard.OnClick(X,Y);
 end;
 
 end.
