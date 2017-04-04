@@ -37,7 +37,7 @@ type
     procedure DrawSmallBall(x,y:integer; color: integer);
     procedure DrawSquare(x,y:integer; selected: boolean);
     function SearchPath(s,e:TPoint): integer;
-    function FillNeighbors(list : array of TPoint):boolean;
+    procedure FillNeighbors(list : array of TPoint);
   public
     { public declarations }
 
@@ -254,7 +254,7 @@ begin
    FillNeighbors(list);
 end;
 
-function TGameBoard.FillNeighbors(list : array of TPoint):boolean;
+procedure TGameBoard.FillNeighbors(list : array of TPoint);
 var
   newlist : array of TPoint;
   i,n,c,l: integer;
