@@ -5,6 +5,7 @@ unit Unit1;
 interface
 
 uses
+  fgl,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls;
 
@@ -20,14 +21,21 @@ type
     x_size,y_size:integer;
     cell_size : integer;
     left_margin,top_margin : integer;
+    sf : array[0..10,0..10] of integer;
     board : array[0..10,0..10] of integer;
     startSquare : TPoint;
     endSquare : TPoint;
+    counter: integer;
+    path : array[0..100 ] of TPoint;
     procedure InitBoard();
     procedure Clear();
     procedure DrawBoard();
+    procedure DrawTest();
+    procedure InitSearch(s,e:TPoint);
     procedure DrawBall(x,y:integer; color: integer);
     procedure DrawSquare(x,y:integer; selected: boolean);
+    function SearchPath(s,e:TPoint): boolean;
+    function FillNeighbors(list : array of TPoint):boolean;
   public
     { public declarations }
 
@@ -148,17 +156,39 @@ var
   xx,yy:integer;
   r:integer;
   begin
+
     if (x<1) then exit;
     xx := (x-1)*cell_size + left_margin;
     yy := (y-1)*cell_size + top_margin;
-    myCanvas.Pen.Color:= clGreen;
+
     if selected then  myCanvas.Brush.Color:=clRed
            else myCanvas.Brush.Color:=clLtGray;
 
     myCanvas.Rectangle(xx,yy,xx+cell_size,yy+cell_size);
 
+    myCanvas.Font.Color := clGreen;
+    myCanvas.Font.Size := 10;
+    myCanvas.TextOut(xx,yy, IntToStr(sf[x,y]));
     DrawBall(x,y,board[x,y]);
   end;
+procedure TGameBoard.DrawTest();
+var
+  xx,yy:integer;
+  i,j:integer;
+  r:integer;
+begin
+  for i:=0 to 10 do
+  for j:=0 to 10 do
+  begin
+    xx := (i-1)*cell_size + left_margin;
+    yy := (j-1)*cell_size + top_margin;
+    myCanvas.Font.Color := clGreen;
+    myCanvas.Font.Size := 10;
+//    myCanvas.Pen.Color:= ballsColor[color];
+    myCanvas.Brush.Color:=clWhite;
+    myCanvas.TextOut(xx,yy, IntToStr(sf[i,j]));
+  end;
+end;
 
 procedure TGameBoard.Draw();
 var
@@ -171,6 +201,92 @@ begin
       begin
         DrawBall(i,j, board[i,j]);
       end;
+  DrawTest();
+end;
+
+procedure TGameBoard.InitSearch(s,e:TPoint);
+var
+  i,j:integer;
+  list: array of TPoint;
+begin
+ for i:=0 to 10 do
+ for j:=0 to 10 do
+   if board[i,j] >0 then sf[i,j] := 100
+      else sf[i,j] := 0;
+
+ for i:=0 to 10 do
+     begin
+      sf[x_size+1,i] := 100;
+      sf[0,i] := 100;
+      sf[i,y_size+1] := 100;
+      sf[i,0] := 100;
+     end;
+
+   counter := 1;
+   SetLength(list, 1);
+   list[0] := s;
+   sf[s.x,s.y] := counter;
+   FillNeighbors(list);
+end;
+
+function TGameBoard.FillNeighbors(list : array of TPoint):boolean;
+var
+  newlist : array of TPoint;
+  i,n,c,l: integer;
+  x,y:integer;
+begin
+ DrawTest();
+ l:=Length(list);
+  SetLength(newlist, 4*l);
+  n:=0;
+  x := list[0].x;
+  y := list[0].y;
+  c := sf[x,y] + 1;
+  for i:=0 to l-1 do
+    begin
+     x := list[i].x;
+     y := list[i].y;
+     if sf[x-1,y] = 0 then
+          begin
+           sf[x-1,y] := c;
+           newlist[n]:=Point(x-1,y);
+           n:=n+1;
+          end;
+     if sf[x+1,y] = 0 then
+          begin
+           sf[x+1,y] := c;
+           newlist[n]:=Point(x+1,y);
+           n:=n+1;
+          end;
+     if sf[x,y-1] = 0 then
+          begin
+           sf[x,y-1] := c;
+           newlist[n]:=Point(x,y-1);
+           n:=n+1;
+          end;
+     if sf[x,y+1] = 0 then
+          begin
+           sf[x,y+1] := c;
+           newlist[n]:=Point(x,y+1);
+           n:=n+1;
+          end;
+    end;
+  if n>0 then FillNeighbors(Slice(newlist, n));
+end;
+
+function TGameBoard.SearchPath(s,e:TPoint): boolean;
+
+begin
+
+
+
+ if ((abs(s.x-e.x)=1) and (s.y=e.y)) or ((abs(s.y-e.y)=1) and (s.x=e.x)) then
+      begin
+         path[counter] := s;
+         counter:=counter+1;
+         result := true;
+      end;
+
 end;
 
 procedure TGameBoard.OnClick(x,y:integer);
@@ -189,12 +305,9 @@ begin
         DrawSquare(startSquare.x,startSquare.y, false);
         endSquare := Point(xx,yy);
         DrawSquare(xx,yy, true);
+        InitSearch(startSquare,endSquare);
       end;
-
-
-
-
- //Draw();
+ Draw();
 end;
 
 
