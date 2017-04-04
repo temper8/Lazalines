@@ -26,15 +26,17 @@ type
     startSquare : TPoint;
     endSquare : TPoint;
     counter: integer;
-    path : array[0..100 ] of TPoint;
+    path : array of TPoint;
     procedure InitBoard();
     procedure Clear();
     procedure DrawBoard();
     procedure DrawTest();
+    procedure DrawPath();
     procedure InitSearch(s,e:TPoint);
     procedure DrawBall(x,y:integer; color: integer);
+    procedure DrawSmallBall(x,y:integer; color: integer);
     procedure DrawSquare(x,y:integer; selected: boolean);
-    function SearchPath(s,e:TPoint): boolean;
+    function SearchPath(s,e:TPoint): integer;
     function FillNeighbors(list : array of TPoint):boolean;
   public
     { public declarations }
@@ -136,6 +138,20 @@ begin
       end;
 end;
 
+procedure TGameBoard.DrawSmallBall(x,y:integer; color: integer);
+var
+  xx,yy:integer;
+  r:integer;
+begin
+  xx := x*cell_size - cell_size div 2 + left_margin;
+  yy := y*cell_size - cell_size div 2 + top_margin;
+  r:=5;
+  myCanvas.Pen.Color:= ballsColor[color];
+  myCanvas.Brush.Color:=ballsColor[color];
+  myCanvas.Ellipse(xx-r,yy-r,xx+r,yy+r);
+end;
+
+
 procedure TGameBoard.DrawBall(x,y:integer; color: integer);
 var
   xx,yy:integer;
@@ -188,6 +204,15 @@ begin
     myCanvas.Brush.Color:=clWhite;
     myCanvas.TextOut(xx,yy, IntToStr(sf[i,j]));
   end;
+end;
+
+procedure TGameBoard.DrawPath();
+var
+  i,n:integer;
+begin
+  n:=Length(path);
+  for i:=0 to n-1 do
+    DrawSmallBall(path[i].x,path[i].y,0);
 end;
 
 procedure TGameBoard.Draw();
@@ -274,19 +299,45 @@ begin
   if n>0 then FillNeighbors(Slice(newlist, n));
 end;
 
-function TGameBoard.SearchPath(s,e:TPoint): boolean;
-
+function TGameBoard.SearchPath(s,e:TPoint): integer;
+var
+  i,n,nn:integer;
+  x,y:integer;
 begin
-
-
-
- if ((abs(s.x-e.x)=1) and (s.y=e.y)) or ((abs(s.y-e.y)=1) and (s.x=e.x)) then
-      begin
-         path[counter] := s;
-         counter:=counter+1;
-         result := true;
-      end;
-
+  x:=e.x;
+  y:=e.y;
+  nn := sf[x,y];
+  if nn > 0 then
+       Begin
+         SetLength(path, nn);
+         path[0]:=Point(x,y);
+         n:=nn;
+         for i:=1 to nn-1 do
+             begin
+              if sf[x-1,y] = n-1 then
+                   begin
+                    path[i]:=Point(x-1,y);
+                    x := x-1;
+                   end
+              else if sf[x+1,y] = n-1 then
+                      begin
+                        path[i]:=Point(x+1,y);
+                        x := x+1;
+                      end
+              else if sf[x,y-1] = n-1 then
+                      begin
+                        path[i]:=Point(x,y-1);
+                        y:=y-1;
+                      end
+              else if sf[x,y+1] = n-1 then
+                   begin
+                     path[i]:=Point(x,y+1);
+                     y:=y+1;
+                   end;
+              n:=sf[x,y];
+             end;
+       end;
+ result := nn;
 end;
 
 procedure TGameBoard.OnClick(x,y:integer);
@@ -306,8 +357,10 @@ begin
         endSquare := Point(xx,yy);
         DrawSquare(xx,yy, true);
         InitSearch(startSquare,endSquare);
+        SearchPath(startSquare,endSquare);
+        DrawPath();
       end;
- Draw();
+// Draw();
 end;
 
 
