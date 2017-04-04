@@ -81,8 +81,8 @@ constructor TGameBoard.Create(canvas : TCanvas);
 
 begin
   myCanvas := canvas;
-  x_size := 7;
-  y_size := 7;
+  x_size := 9;
+  y_size := 9;
 end;
 
 procedure TGameBoard.InitBoard();
