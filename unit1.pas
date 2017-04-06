@@ -51,10 +51,12 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
+    Button2: TButton;
     Image1: TImage;
     Label1: TLabel;
     Label2: TLabel;
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
   private
@@ -387,6 +389,11 @@ begin
   gameboard.InitBoard();
   gameboard.Draw();
 
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+ gameboard.Draw();
 end;
 
 
