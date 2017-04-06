@@ -177,7 +177,7 @@ var
     xx := (x-1)*cell_size + left_margin;
     yy := (y-1)*cell_size + top_margin;
 
-    if selected then  myCanvas.Brush.Color:=clRed
+    if selected then  myCanvas.Brush.Color:=clGray
            else myCanvas.Brush.Color:=clLtGray;
 
     myCanvas.Rectangle(xx,yy,xx+cell_size,yy+cell_size);
@@ -226,7 +226,7 @@ begin
       begin
         DrawBall(i,j, board[i,j]);
       end;
-  DrawTest();
+//  DrawTest();
 end;
 
 procedure TGameBoard.InitSearch(s,e:TPoint);
@@ -260,7 +260,7 @@ var
   i,n,c,l: integer;
   x,y:integer;
 begin
- DrawTest();
+// DrawTest();
  l:=Length(list);
   SetLength(newlist, 4*l);
   n:=0;
