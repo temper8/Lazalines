@@ -348,17 +348,32 @@ begin
  yy :=(y-top_margin) div cell_size+1;
  if (startSquare.x = 0) then
       begin
-        startSquare := Point(xx,yy);
-        DrawSquare(xx,yy, true);
+        if board[xx,yy] >0 then
+             begin
+              startSquare := Point(xx,yy);
+              DrawSquare(xx,yy, true);
+             end;
       end
  else
       begin
-        DrawSquare(startSquare.x,startSquare.y, false);
-        endSquare := Point(xx,yy);
-        DrawSquare(xx,yy, true);
-        InitSearch(startSquare,endSquare);
-        SearchPath(startSquare,endSquare);
-        DrawPath();
+       if board[xx,yy] >0 then
+             begin
+               DrawSquare(startSquare.x,startSquare.y, false);
+              startSquare := Point(xx,yy);
+              DrawSquare(xx,yy, true);
+             end
+       else
+             begin
+              DrawSquare(startSquare.x,startSquare.y, false);
+              endSquare := Point(xx,yy);
+              InitSearch(startSquare,endSquare);
+              if SearchPath(startSquare,endSquare) >0  then
+                   begin
+                    DrawSquare(xx,yy, true);
+                    DrawPath();
+                   end;
+             end;
+
       end;
 // Draw();
 end;
