@@ -31,6 +31,7 @@ type
     procedure Clear();
     procedure DrawBoard();
     procedure DrawTest();
+    procedure ClearPath();
     procedure DrawPath();
     procedure InitSearch(s,e:TPoint);
     procedure DrawBall(x,y:integer; color: integer);
@@ -208,13 +209,27 @@ begin
   end;
 end;
 
-procedure TGameBoard.DrawPath();
+procedure TGameBoard.ClearPath();
 var
   i,n:integer;
 begin
   n:=Length(path);
   for i:=0 to n-1 do
-    DrawSmallBall(path[i].x,path[i].y,0);
+      DrawSquare(path[i].x,path[i].y,false);
+   Form1.Refresh;
+end;
+
+procedure TGameBoard.DrawPath();
+var
+  i,n:integer;
+begin
+  n:=Length(path);
+  for i:=n-1 downto 0 do
+    begin
+     DrawSmallBall(path[i].x,path[i].y,0);
+     Sleep(20);
+     Form1.Refresh;
+    end;
 end;
 
 procedure TGameBoard.Draw();
@@ -366,13 +381,20 @@ begin
              end
        else
              begin
-              DrawSquare(startSquare.x,startSquare.y, false);
+
               endSquare := Point(xx,yy);
               InitSearch(startSquare,endSquare);
               if SearchPath(startSquare,endSquare) >0  then
                    begin
-                    DrawSquare(xx,yy, true);
+                    DrawSquare(startSquare.x,startSquare.y, false);
                     DrawPath();
+                    board[xx,yy] := board[startSquare.x,startSquare.y];
+                    board[startSquare.x,startSquare.y] := 0;
+                   // DrawSquare(startSquare.x,startSquare.y, false);
+                    Draw();
+                   // DrawSquare(xx,yy, false);
+                    //ClearPath();
+                    startSquare.x :=0;
                    end;
              end;
 
