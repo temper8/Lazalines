@@ -27,12 +27,17 @@ type
     endSquare : TPoint;
     counter: integer;
     path : array of TPoint;
+    clearBallsCount:integer;
+    clearBalls : array[0..100] of TPoint;
     procedure InitBoard();
     procedure Clear();
     procedure DrawBoard();
     procedure DrawTest();
     procedure ClearPath();
     procedure DrawPath();
+    procedure CheckLines();
+    procedure checkVertLine(x,y:integer);
+    procedure checkHorzLine(x,y:integer);
     procedure InitSearch(s,e:TPoint);
     procedure DrawBall(x,y:integer; color: integer);
     procedure DrawSmallBall(x,y:integer; color: integer);
@@ -190,6 +195,7 @@ var
     myCanvas.TextOut(xx,yy, IntToStr(sf[x,y]));
     DrawBall(x,y,board[x,y]);
   end;
+
 procedure TGameBoard.DrawTest();
 var
   xx,yy:integer;
@@ -357,6 +363,51 @@ begin
  result := nn;
 end;
 
+procedure  TGameBoard.CheckLines();
+var
+  x,y: integer;
+  i:integer;
+begin
+ clearBallsCount:=0;
+ for x:=1 to x_size do
+ for y:=1 to y_size do
+ begin
+  if board[x,y] >0 then
+       begin
+         checkHorzLine(x,y);
+         checkVertLine(x,y);
+       end;
+ end;
+ for i:=0 to clearBallsCount do
+  board[clearBalls[i].x,clearBalls[i].y]:=0;
+end;
+
+procedure  TGameBoard.checkVertLine(x,y:integer);
+var
+  color:integer;
+begin
+
+end;
+
+
+procedure  TGameBoard.checkHorzLine(x,y:integer);
+var
+  color:integer;
+  xx,i,len:integer;
+begin
+  color:=board[x,y];
+  xx:=x+1;
+  while board[xx,y] = color do
+        xx:=xx+1;
+  len := xx-x;
+  if len >4 then
+       begin
+         for i:=0 to len-1 do
+           clearBalls[ClearBallsCount+i]:=Point(x+i,y);
+          ClearBallsCount:=ClearBallsCount+len;
+       end
+end;
+
 procedure TGameBoard.OnClick(x,y:integer);
 var
   xx,yy :integer;
@@ -391,6 +442,7 @@ begin
                     board[xx,yy] := board[startSquare.x,startSquare.y];
                     board[startSquare.x,startSquare.y] := 0;
                    // DrawSquare(startSquare.x,startSquare.y, false);
+                    CheckLines();
                     Draw();
                    // DrawSquare(xx,yy, false);
                     //ClearPath();
