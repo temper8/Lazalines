@@ -40,6 +40,7 @@ type
     procedure checkHorzLine(x,y:integer);
     procedure checkDiag1Line(x,y:integer);
     procedure checkDiag2Line(x,y:integer);
+    function addNewBalls():boolean;
     procedure InitSearch(s,e:TPoint);
     procedure DrawBall(x,y:integer; color: integer);
     procedure DrawSmallBall(x,y:integer; color: integer);
@@ -467,6 +468,41 @@ begin
        end
 end;
 
+function TGameBoard.addNewBalls():boolean;
+var
+   emptySquare : array[0..100] of TPoint;
+   emptySquareCount:integer;
+   x,y:integer;
+   new1, new2, new3 :integer;
+   c1,c2,c3:integer;
+  begin
+   emptySquareCount:=0;
+   for x:=1 to x_size do
+   for y:=1 to y_size do
+    if board[x,y] = 0 then
+         begin
+          emptySquare[emptySquareCount]:=Point(x,y);
+          emptySquareCount:=emptySquareCount+1;
+         end;
+   if emptySquareCount>2 then
+        begin
+           new1 := Random(emptySquareCount);
+           new2 := Random(emptySquareCount-1);
+           new3 := Random(emptySquareCount-2);
+           if new1<=new2 then new2:= new2 +1;
+           if new1<=new3 then new3:= new3 +1;
+           if new2<=new3 then new3:= new3 +1;
+           c1 := Random(7)+1;
+           c2 := Random(7)+1;
+           c3 := Random(7)+1;
+           Board[emptySquare[new1].x,emptySquare[new1].y] := c1;
+           Board[emptySquare[new2].x,emptySquare[new2].y] := c2;
+           Board[emptySquare[new3].x,emptySquare[new3].y] := c3;
+         result := true;
+        end
+   else
+         result := false;
+  end;
 
 procedure TGameBoard.OnClick(x,y:integer);
 var
@@ -503,6 +539,7 @@ begin
                     board[startSquare.x,startSquare.y] := 0;
                    // DrawSquare(startSquare.x,startSquare.y, false);
                     CheckLines();
+                    addNewBalls();
                     Draw();
                    // DrawSquare(xx,yy, false);
                     //ClearPath();
