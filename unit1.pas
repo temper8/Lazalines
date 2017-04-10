@@ -385,8 +385,19 @@ end;
 procedure  TGameBoard.checkVertLine(x,y:integer);
 var
   color:integer;
+  yy,i,len:integer;
 begin
-
+  color:=board[x,y];
+  yy:=y+1;
+  while board[x,yy] = color do
+        yy:=yy+1;
+  len := yy-y;
+  if len >4 then
+       begin
+         for i:=0 to len-1 do
+           clearBalls[ClearBallsCount+i]:=Point(x,y+i);
+          ClearBallsCount:=ClearBallsCount+len;
+       end
 end;
 
 
