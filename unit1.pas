@@ -38,6 +38,8 @@ type
     procedure CheckLines();
     procedure checkVertLine(x,y:integer);
     procedure checkHorzLine(x,y:integer);
+    procedure checkDiag1Line(x,y:integer);
+    procedure checkDiag2Line(x,y:integer);
     procedure InitSearch(s,e:TPoint);
     procedure DrawBall(x,y:integer; color: integer);
     procedure DrawSmallBall(x,y:integer; color: integer);
@@ -376,6 +378,8 @@ begin
        begin
          checkHorzLine(x,y);
          checkVertLine(x,y);
+         checkDiag1Line(x,y);
+         checkDiag2Line(x,y);
        end;
  end;
  for i:=0 to clearBallsCount do
@@ -418,6 +422,51 @@ begin
           ClearBallsCount:=ClearBallsCount+len;
        end
 end;
+
+procedure TGameBoard.checkDiag1Line(x,y:integer);
+var
+  color:integer;
+  xx,yy,i,len:integer;
+begin
+  color:=board[x,y];
+  xx:=x+1;
+  yy:=y+1;
+  while board[xx,yy] = color do
+        begin
+         xx:=xx+1;
+         yy:=yy+1;
+        end;
+  len := xx-x;
+  if len >4 then
+       begin
+         for i:=0 to len-1 do
+           clearBalls[ClearBallsCount+i]:=Point(x+i,y+i);
+          ClearBallsCount:=ClearBallsCount+len;
+       end
+end;
+
+procedure TGameBoard.checkDiag2Line(x,y:integer);
+var
+  color:integer;
+  xx,yy,i,len:integer;
+begin
+  color:=board[x,y];
+  xx:=x+1;
+  yy:=y-1;
+  while board[xx,yy] = color do
+        begin
+         xx:=xx+1;
+         yy:=yy-1;
+        end;
+  len := xx-x;
+  if len >4 then
+       begin
+         for i:=0 to len-1 do
+           clearBalls[ClearBallsCount+i]:=Point(x+i,y-i);
+          ClearBallsCount:=ClearBallsCount+len;
+       end
+end;
+
 
 procedure TGameBoard.OnClick(x,y:integer);
 var
