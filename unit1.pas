@@ -49,7 +49,7 @@ type
     procedure FillNeighbors(list : array of TPoint);
   public
     { public declarations }
-
+    LinesGame : TLinesGame;
     constructor Create(canvas : TCanvas);
     procedure Draw();
     procedure OnClick(x,y:integer);
@@ -94,6 +94,9 @@ begin
   myCanvas := canvas;
   x_size := 9;
   y_size := 9;
+
+  LinesGame := LinesGame.Create();
+
 end;
 
 procedure TGameBoard.InitBoard();
