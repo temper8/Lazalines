@@ -1,4 +1,4 @@
-unit LinesPlay;
+unit LinesGame;
 
 {$mode objfpc}{$H+}
 
@@ -9,7 +9,7 @@ uses
 
 type
 
-TLinesPlay = class
+TLinesGame = class
 public
   { public declarations }
   x_size,y_size:integer;
@@ -27,7 +27,7 @@ end;
 
 implementation
 
-constructor TLinesPlay.Create();
+constructor TLinesGame.Create();
 
 begin
 

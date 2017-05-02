@@ -7,7 +7,7 @@ interface
 uses
   fgl,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, LinesPlay;
+  ExtCtrls, LinesGame;
 
 const
   ballsColor: array[0..7] of TColor = (clBlack, clGreen,clRed, clTeal, clYellow, clBlue, clFuchsia, clWhite);
