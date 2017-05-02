@@ -13,6 +13,11 @@ const
   ballsColor: array[0..7] of TColor = (clBlack, clGreen,clRed, clTeal, clYellow, clBlue, clFuchsia, clWhite);
 
 type
+ TBallsHolder = class
+  myCanvas : TCanvas;
+  constructor Create(canvas : TCanvas);
+  procedure Draw();
+ end;
 
   TGameBoard = class
     private
@@ -82,9 +87,12 @@ var
 implementation
 
 {$R *.lfm}
+constructor TBallsHolder.Create(canvas : TCanvas);
+begin
+ myCanvas := canvas;
+end;
 
 constructor TGameBoard.Create(canvas : TCanvas);
-
 begin
   myCanvas := canvas;
   x_size := 9;
