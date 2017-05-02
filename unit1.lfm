@@ -1,48 +1,48 @@
 object Form1: TForm1
   Left = 247
-  Height = 502
+  Height = 519
   Top = 116
-  Width = 548
+  Width = 553
   Caption = 'Form1'
-  ClientHeight = 502
-  ClientWidth = 548
+  ClientHeight = 519
+  ClientWidth = 553
   LCLVersion = '1.6.4.0'
   object Button1: TButton
-    Left = 464
+    Left = 384
     Height = 25
-    Top = 456
+    Top = 0
     Width = 75
     Caption = 'Init'
     OnClick = Button1Click
     TabOrder = 0
   end
   object Image1: TImage
-    Left = 21
-    Height = 431
-    Top = 9
-    Width = 491
+    Left = 8
+    Height = 472
+    Top = 32
+    Width = 539
     OnMouseUp = Image1MouseUp
   end
   object Label1: TLabel
-    Left = 21
+    Left = 16
     Height = 15
-    Top = 464
+    Top = 10
     Width = 34
     Caption = 'Label1'
     ParentColor = False
   end
   object Label2: TLabel
-    Left = 21
+    Left = 96
     Height = 15
-    Top = 480
+    Top = 10
     Width = 34
     Caption = 'Label2'
     ParentColor = False
   end
   object Button2: TButton
-    Left = 344
+    Left = 272
     Height = 25
-    Top = 456
+    Top = 0
     Width = 75
     Caption = 'ReDraw'
     OnClick = Button2Click
