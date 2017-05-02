@@ -54,8 +54,11 @@ type
     Button1: TButton;
     Button2: TButton;
     Image1: TImage;
+    Image2: TImage;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
+    StaticText1: TStaticText;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
