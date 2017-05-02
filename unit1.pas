@@ -14,7 +14,11 @@ const
 
 type
  TBallsHolder = class
+ public
+    { public declarations }
   myCanvas : TCanvas;
+  Balls : Array[1..3] of integer;
+  procedure InitBalls();
   constructor Create(canvas : TCanvas);
   procedure Draw();
  end;
@@ -84,12 +88,39 @@ type
 var
   Form1: TForm1;
   gameboard:TGameBoard;
+  BallsHolder:TBallsHolder;
 implementation
 
 {$R *.lfm}
 constructor TBallsHolder.Create(canvas : TCanvas);
 begin
  myCanvas := canvas;
+end;
+
+procedure TBallsHolder.InitBalls();
+var
+  i: integer;
+begin
+    for i:=1 to 3 do
+      Balls[i] := Random(6)+1;
+end;
+
+procedure TBallsHolder.Draw();
+var
+ BallHeight: integer;
+ LeftMargin: integer;
+ i,x,y:integer;
+begin
+  y := 2;
+  BallHeight := myCanvas.Height - 2*y;
+  LeftMargin := (myCanvas.Width - 3*BallHeight) div 2;
+  for i:=1 to 3 do
+    begin
+       x := LeftMargin + (BallHeight+y)*(i-1);
+       myCanvas.Pen.Color:= ballsColor[Balls[i]];
+       myCanvas.Brush.Color:=ballsColor[Balls[i]];
+       myCanvas.Ellipse(x,y,x+BallHeight,y+BallHeight);
+    end;
 end;
 
 constructor TGameBoard.Create(canvas : TCanvas);
@@ -247,9 +278,6 @@ end;
 
 
 
-
-
-
 procedure TGameBoard.OnClick(x,y:integer);
 var
   xx,yy :integer;
@@ -306,6 +334,9 @@ begin
   gameboard.LinesGame.InitBoard();
   gameboard.Draw();
 
+  BallsHolder:=TBallsHolder.Create(image2.Canvas);
+  BallsHolder.InitBalls();
+  BallsHolder.Draw();
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
