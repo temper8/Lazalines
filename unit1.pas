@@ -62,6 +62,7 @@ type
   TForm1 = class(TForm)
     Button1: TButton;
     Button2: TButton;
+    Button3: TButton;
     Image1: TImage;
     Image2: TImage;
     Label1: TLabel;
@@ -89,6 +90,7 @@ var
   Form1: TForm1;
   gameboard:TGameBoard;
   BallsHolder:TBallsHolder;
+
 implementation
 
 {$R *.lfm}
@@ -334,7 +336,7 @@ begin
   gameboard.LinesGame.InitBoard();
   gameboard.Draw();
 
-  BallsHolder:=TBallsHolder.Create(image2.Canvas);
+  BallsHolder := TBallsHolder.Create(image2.Canvas);
   BallsHolder.InitBalls();
   BallsHolder.Draw();
 end;
